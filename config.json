@@ -1,0 +1,195 @@
+{
+  // EASY SETUP:
+  // 1. Copy this file and name the copy config.local.json
+  // 2. Put your token and Discord webhook into config.local.json
+  // 3. Leave this file alone so future updates are easier
+  // 4. index.php will use config.local.json automatically
+
+  // Secret word at the end of your webhook URL.
+  // Example: if this is "mysecret", your URL ends with /mysecret
+  "urlToken": "replace-me",
+
+  // Your main Discord webhook URL.
+  // This is where notifications go unless you set a more specific webhook below.
+  "discordWebhookUrl": "https://discord.com/api/webhooks/REPLACE/ME",
+
+  "rosterLookup": {
+    // WHERE TO CHECK YOUR MEMBER LIST:
+    // "google_sheet" = easiest for most people
+    // "database" = only use this if you already have the website database set up
+    "source": "google_sheet",
+
+    // If true, only players found in your roster are allowed through.
+    // If false, everyone is allowed through and the roster is ignored.
+    "enabled": true,
+
+    // How often to refresh the roster.
+    // 300 = every 5 minutes.
+    "refreshSeconds": 300,
+
+    // Only allow rows with this status.
+    // Leave as "Active" if your sheet has an Active/Inactive style status column.
+    // Set to "" if you do not want to filter by status at all.
+    "requiredStatus": "Active",
+
+    // These must match your sheet column names exactly.
+    // Most people can leave these alone if they name their sheet columns like this.
+    "columns": {
+      "player": "Player",
+      "status": "Status",
+      "discordId": "Discord ID",
+      "discordName": "Discord Name"
+    },
+
+    "googleSheet": {
+      // HOW TO READ GOOGLE SHEETS:
+      // "gviz" = easiest, no API key needed, sheet must be public or published
+      // "values_api" = more reliable, needs a Google API key
+      // "csv_export" = older fallback option
+      "mode": "gviz",
+
+      // The long ID from your Google Sheets URL.
+      // Example:
+      // https://docs.google.com/spreadsheets/d/THIS_PART_IS_THE_ID/edit
+      "sheetId": "",
+
+      // Only used by values_api mode.
+      // Example: Roster!A:D
+      "range": "Roster!A:D",
+
+      // Name of the tab inside your spreadsheet.
+      // Used by gviz mode and easier than using gid.
+      "sheetName": "Roster",
+
+      // Backup tab selector if you prefer using the tab ID number.
+      "gid": "0",
+
+      // Only used by values_api mode.
+      // Leave blank if you are using gviz or csv_export.
+      "apiKey": "",
+
+      // Only used by csv_export mode.
+      "csvUrl": ""
+    }
+  },
+
+  "eventRules": {
+    "LOOT": {
+      // Set to false to turn off this event type completely.
+      "enabled": true,
+      // Minimum total value before the event is sent.
+      "minValue": 5000000,
+      // Optional special webhook just for this event type.
+      "webhookUrl": ""
+    },
+    "PET": {
+      "enabled": true,
+      "webhookUrl": ""
+    },
+    "COLLECTION": {
+      "enabled": true,
+      "webhookUrl": ""
+    },
+    "DEATH": {
+      "enabled": true,
+      "webhookUrl": ""
+    },
+    "QUEST": {
+      "enabled": true,
+      "webhookUrl": ""
+    },
+    "CLUE": {
+      "enabled": true,
+      "minValue": 1000000,
+      "webhookUrl": ""
+    },
+    "COMBAT_TASK": {
+      "enabled": true,
+      "webhookUrl": ""
+    },
+    "ACHIEVEMENT_DIARY": {
+      "enabled": true,
+      // EASY, MEDIUM, HARD, or ELITE
+      "minTier": "MEDIUM",
+      "webhookUrl": ""
+    },
+    "PLAYER_KILL": {
+      "enabled": true,
+      "webhookUrl": ""
+    },
+    "LEVEL": {
+      "enabled": true,
+      // Lowest level that can be posted.
+      "minLevel": 50,
+      // Only post these exact levels.
+      // Leave this empty if you want every level at or above minLevel.
+      "tiers": [50, 60, 70, 80, 90, 99],
+      // Optional per-skill rules if you want different level rules for specific skills.
+      "skills": {
+        // "Agility": {
+        //   "minLevel": 70,
+        //   "tiers": [70, 80, 90, 99]
+        // }
+      },
+      "webhookUrl": ""
+    }
+  },
+
+  "highValueRule": {
+    // Sends very valuable drops to a separate webhook if you want.
+    "enabled": true,
+    "minValue": 40000000,
+    "webhookUrl": "https://discord.com/api/webhooks/REPLACE/ME",
+    // Only use the special webhook for these event types.
+    "onlyTypes": ["LOOT", "CLUE"]
+  },
+
+  "globalRules": {
+    // Exact item names you never want posted.
+    "blockedItems": [],
+    // Event types you never want posted.
+    "blockedTypes": ["CHAT"],
+    // Stops repeats for the same event for this many seconds.
+    // 0 turns this off.
+    "rateLimitSeconds": 0
+  },
+
+  "discordOptions": {
+    // Quietly tags the matched Discord member without sending a loud notification sound.
+    "silentMentionDropOwner": true
+  },
+
+  "logging": {
+    "enabled": true,
+    "file": "logs/dink.log",
+    // Saves the full incoming data into the log file.
+    // Turn this off if you want smaller logs.
+    "logPayload": true
+  },
+
+  "forumRouting": {
+    // If true, messages are sent into forum threads/categories.
+    // If false, everything goes straight into the webhook channel.
+    "enabled": true,
+    "cacheFile": "thread-cache.json",
+    "seasonal": {
+      "enabled": true,
+      "categoryKey": "SEASONAL"
+    },
+    // Names of the forum threads/categories to use.
+    "categories": {
+      "LOOT": "Loot",
+      "PET": "Pets",
+      "COLLECTION": "Collection Log",
+      "DEATH": "Deaths",
+      "QUEST": "Quests",
+      "CLUE": "Clues",
+      "COMBAT_TASK": "Combat Tasks",
+      "ACHIEVEMENT_DIARY": "Achievement Diaries",
+      "PLAYER_KILL": "Player Kills",
+      "LEVEL": "Levels",
+      "HIGH_VALUE": "Big Drops",
+      "SEASONAL": "Seasonal"
+    }
+  }
+}

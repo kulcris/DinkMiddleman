@@ -1,0 +1,5 @@
+config.local.json
+logs/
+thread-cache.json
+.DS_Store
+Thumbs.db
